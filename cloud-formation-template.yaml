@@ -1,0 +1,70 @@
+﻿AWSTemplateFormatVersion: '2010-09-09'
+Transform: 'AWS::Serverless-2016-10-31'
+Description: Coming Home Alert
+
+Parameters:
+  PhoneNumber:
+    Type: String
+    Description: The phone number to send the message to using international dialing format and no spaces.
+    ConstraintDescription: Must match the pattern ^\+\d{12,}
+
+Resources:
+
+  # Define IAM roles
+
+  TriggerAlertLambdaRole:
+    Type: AWS::IAM::Role
+    Properties:
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+      Policies:
+        - PolicyName: SendSMS
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action:
+                  - sns:GetSMSAttributes
+                  - sns:Publish
+                  - sns:SetSMSAttributes
+                Resource:
+                  - "*"
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Action:
+              - sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+
+  # Define the Lambda function
+
+  TriggerAlertLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: uk.co.gavincornwell.cominghome.TriggerAlert::handleRequest
+      Runtime: java8
+      CodeUri: ./target/coming-home-alert-0.1-SNAPSHOT.jar
+      Description: Function that triggers a coming alert
+      MemorySize: 256
+      Timeout: 30
+      Role: !GetAtt TriggerAlertLambdaRole.Arn
+      Environment:
+        Variables:
+          PHONE_NUMBER: !Ref PhoneNumber
+          TABLE_NAME: TripDetails
+      Events:
+        Trigger:
+          Type: Api
+          Properties:
+            Path: /users/{userId}/trips
+            Method: post
+  
+Outputs:
+
+  AddTripURL:
+    Description: URL for triggering a new trip
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/users/userId/trips"
+    

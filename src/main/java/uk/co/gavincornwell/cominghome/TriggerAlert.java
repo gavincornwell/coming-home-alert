@@ -20,7 +20,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
- * Lambda function to handle the triggering of coming home alerts. Expects the
+ * Lambda function to handle the triggering of an alert. Expects the
  * following JSON body: 
  * 
  * <pre>
@@ -79,6 +79,7 @@ public class TriggerAlert implements RequestHandler<LambdaProxyRequest, LambdaPr
             }
 
             // send the message via SMS
+            Logger.logDebug(String.format("Sending '%s' to : %s", message, phoneNumber), context);
             String messageId = sendMessage(phoneNumber, message);
             Logger.logInfo(String.format("Sent '%s' to '%s' with id: %s", message, phoneNumber, messageId), context);
 

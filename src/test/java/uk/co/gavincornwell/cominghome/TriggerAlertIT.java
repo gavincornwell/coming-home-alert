@@ -31,7 +31,7 @@ public class TriggerAlertIT
     public void testTriggerHandler() throws Exception
     {
         // define the message to send
-        String requestBody = "{ \"message\": \"TEST Gav is leaving TEST\"}";
+        String requestBody = "{ \"message\": \"JUnit Test\"}";
         
         // call the lambda function
         LambdaProxyRequest request = new LambdaProxyRequest();

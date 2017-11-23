@@ -1,0 +1,19 @@
+#!/bin/bash
+
+if [ $# != 3 ]
+then
+  echo "usage: deploy <bucket-name> <stack-name> <phone-number>"
+  echo
+  echo "To see a list of available S3 buckets run 'aws s3 ls'."
+  exit 1
+fi
+
+aws cloudformation package --template-file cloud-formation-template.yaml --s3-bucket $1 --output-template-file cloud-formation-deploy.yaml
+
+aws cloudformation deploy --template-file cloud-formation-deploy.yaml --stack-name $2 --parameter-overrides PhoneNumber=$3 --capabilities CAPABILITY_IAM
+
+# TODO: only describe stacks if previous command worked
+
+aws cloudformation describe-stacks --stack-name $2
+
+rm cloud-formation-deploy.yaml
