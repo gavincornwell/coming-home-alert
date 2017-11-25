@@ -174,7 +174,7 @@ public class TriggerAlert implements RequestHandler<LambdaProxyRequest, LambdaPr
                     .withStringValue("ComingHome").withDataType("String"));
         // sets the max price to 0.50 USD
         smsAttributes.put("AWS.SNS.SMS.MaxPrice",
-                    new MessageAttributeValue().withStringValue("0.25").withDataType("Number"));
+                    new MessageAttributeValue().withStringValue("0.50").withDataType("Number"));
         // sets the type to promotional
         smsAttributes.put("AWS.SNS.SMS.SMSType", new MessageAttributeValue()
                     .withStringValue("Promotional").withDataType("String"));
