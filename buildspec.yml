@@ -10,9 +10,6 @@ phases:
   build:
     commands:
       - echo Build started on `date`
-      - printenv
-      - echo PHONE_NUMBER=$PHONE_NUMBER
-      - echo DEPLOYMENT_BUCKET=$DEPLOYMENT_BUCKET
       - mvn clean package
       - aws cloudformation package --template-file cloud-formation-template.yaml --s3-bucket $DEPLOYMENT_BUCKET --output-template-file cloud-formation-deploy.yaml
   post_build:
@@ -20,4 +17,4 @@ phases:
       - echo Build completed on `date`
 artifacts:
   files:
-    - target/coming-home-alert-0.1-SNAPSHOT.jar
+    - cloud-formation-deploy.yaml
