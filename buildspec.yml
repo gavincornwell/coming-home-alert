@@ -10,9 +10,11 @@ phases:
   build:
     commands:
       - echo Build started on `date`
+      - printenv
+      - echo PHONE_NUMBER=$PHONE_NUMBER
+      - echo DEPLOYMENT_BUCKET=$DEPLOYMENT_BUCKET
       - mvn clean package
       - aws cloudformation package --template-file cloud-formation-template.yaml --s3-bucket $DEPLOYMENT_BUCKET --output-template-file cloud-formation-deploy.yaml
-      - echo PHONE_NUMBER=$PHONE_NUMBER
   post_build:
     commands:
       - echo Build completed on `date`
