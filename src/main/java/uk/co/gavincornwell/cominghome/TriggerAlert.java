@@ -34,6 +34,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class TriggerAlert implements RequestHandler<LambdaProxyRequest, LambdaProxyResponse>
 {
     public static final String PHONE_NUMBER = "PHONE_NUMBER";
+    public static final String VALID_USER_ID = "VALID_USER_ID";
     public static final String TABLE_NAME = "TABLE_NAME";
     
     protected static final String PROPERTY_MESSAGE = "message";
@@ -50,6 +51,29 @@ public class TriggerAlert implements RequestHandler<LambdaProxyRequest, LambdaPr
 
         try
         {
+            String validUserId = System.getenv(VALID_USER_ID);
+            Logger.logDebug(String.format("validUserId: %s", validUserId), context);
+            if (validUserId == null || validUserId.isEmpty())
+            {
+                throw new IllegalArgumentException("VALID_USER_ID environment variable is required.");
+            }
+            
+            // grab the provided userId from the path parameters
+            Map<String, String> pathParams = request.getPathParameters();
+            Logger.logDebug("pathParams: " + pathParams, context);
+            String providedUserId = null;
+            if (pathParams != null)
+            {
+                providedUserId = pathParams.get("userId");
+                Logger.logDebug(String.format("providedUserId: %s", providedUserId), context);
+            }
+            
+            // check provided and valid user id match
+            if (providedUserId == null || !validUserId.equals(providedUserId))
+            {
+                throw new IllegalStateException("Provided user ID is not valid");
+            }
+            
             String phoneNumber = System.getenv(PHONE_NUMBER);
             Logger.logDebug(String.format("phoneNumber: %s", phoneNumber), context); 
             if (phoneNumber == null || phoneNumber.isEmpty())
@@ -94,8 +118,16 @@ public class TriggerAlert implements RequestHandler<LambdaProxyRequest, LambdaPr
             Logger.logError(iae, context);
 
             // return error response
-            response.setStatusCode(400);
+            response.setStatusCode(HttpStatus.SC_BAD_REQUEST);
             response.setBody(String.format("{ \"error\": \"%s\"}", iae.getMessage()));
+        }
+        catch (IllegalStateException ise)
+        {
+            Logger.logError(ise, context);
+
+            // return error response
+            response.setStatusCode(HttpStatus.SC_UNAUTHORIZED);
+            response.setBody(String.format("{ \"error\": \"%s\"}", ise.getMessage()));
         }
         catch (Exception e)
         {
@@ -104,7 +136,7 @@ public class TriggerAlert implements RequestHandler<LambdaProxyRequest, LambdaPr
             Logger.logError(e, context);
 
             // return error response
-            response.setStatusCode(500);
+            response.setStatusCode(HttpStatus.SC_INTERNAL_SERVER_ERROR);
             response.setBody(String.format("{ \"error\": \"%s\"}", e.getMessage()));
         }
 

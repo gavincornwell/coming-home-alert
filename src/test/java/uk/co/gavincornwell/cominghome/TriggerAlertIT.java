@@ -3,6 +3,9 @@ package uk.co.gavincornwell.cominghome;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.alfresco.aws.lambda.model.LambdaProxyRequest;
 import org.alfresco.aws.lambda.model.LambdaProxyResponse;
 import org.alfresco.aws.lambda.utils.OfflineLambdaContext;
@@ -36,6 +39,9 @@ public class TriggerAlertIT
         // call the lambda function
         LambdaProxyRequest request = new LambdaProxyRequest();
         request.setBody(requestBody);
+        Map<String, String> pathParams = new HashMap<String, String>();
+        pathParams.put("userId", "userId");
+        request.setPathParameters(pathParams);
         TriggerAlert alert = new TriggerAlert();
         LambdaProxyResponse response = alert.handleRequest(request, new OfflineLambdaContext());
         

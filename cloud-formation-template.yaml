@@ -7,6 +7,9 @@ Parameters:
     Type: String
     Description: The phone number to send the message to using international dialing format and no spaces.
     ConstraintDescription: Must match the pattern ^\+\d{12,}
+  ValidUserId:
+    Type: String
+    Description: An user ID the client has to provide as part of the URL
 
 Resources:
 
@@ -54,6 +57,7 @@ Resources:
       Environment:
         Variables:
           PHONE_NUMBER: !Ref PhoneNumber
+          VALID_USER_ID: !Ref ValidUserId
           TABLE_NAME: TripDetails
       Events:
         Trigger:
