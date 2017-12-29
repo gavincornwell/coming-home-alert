@@ -9,7 +9,7 @@ Parameters:
     ConstraintDescription: Must match the pattern ^\+\d{12,}
   ValidUserId:
     Type: String
-    Description: An user ID the client has to provide as part of the URL
+    Description: A user ID the client has to provide as part of the URL
 
 Resources:
 
@@ -21,15 +21,13 @@ Resources:
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
       Policies:
-        - PolicyName: SendSMS
+        - PolicyName: Send
           PolicyDocument:
             Version: 2012-10-17
             Statement:
               - Effect: Allow
                 Action:
-                  - sns:GetSMSAttributes
                   - sns:Publish
-                  - sns:SetSMSAttributes
                 Resource:
                   - "*"
       AssumeRolePolicyDocument:
@@ -42,6 +40,15 @@ Resources:
               Service:
                 - lambda.amazonaws.com
 
+  # Define the SNS Topic and SMS Subscription
+  TriggerAlertTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      DisplayName: ComingHome
+      Subscription:
+        - Endpoint: !Ref PhoneNumber
+          Protocol: sms
+  
   # Define the Lambda function
 
   TriggerAlertLambda:
@@ -56,9 +63,8 @@ Resources:
       Role: !GetAtt TriggerAlertLambdaRole.Arn
       Environment:
         Variables:
-          PHONE_NUMBER: !Ref PhoneNumber
+          TOPIC_ARN: !Ref TriggerAlertTopic
           VALID_USER_ID: !Ref ValidUserId
-          TABLE_NAME: TripDetails
       Events:
         Trigger:
           Type: Api

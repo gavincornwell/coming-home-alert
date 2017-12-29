@@ -58,7 +58,7 @@ public class TriggerAlertIT
         messageId = jsonNode.get(TriggerAlert.PROPERTY_MESSAGE_ID).asText();
         assertFalse("Expected messageId property to be populated", messageId.isEmpty());
         
-        // TOOD: make sure the corresponding entry is in the dynamo table
+        // TOOD: make sure the corresponding entry is in the dynamo table after wait period
     }
     
     @AfterClass
