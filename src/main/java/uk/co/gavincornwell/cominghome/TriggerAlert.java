@@ -39,9 +39,7 @@ public class TriggerAlert implements RequestHandler<LambdaProxyRequest, LambdaPr
     @Override
     public LambdaProxyResponse handleRequest(LambdaProxyRequest request, Context context)
     {
-        // TODO: set log level i.e. add Logger.setLogLevel();
-        
-        // TODO: dump the full request we received (add a toString to request/response objects in library)
+        Logger.logDebug(String.format("received request: %s", request), context);
         
         LambdaProxyResponse response = new LambdaProxyResponse();
 
@@ -90,9 +88,11 @@ public class TriggerAlert implements RequestHandler<LambdaProxyRequest, LambdaPr
 
             // send the message to the topic
             String messageId = sendMessage(topicArn, message);
+            Logger.logInfo(String.format("Message with id '%s' sent", messageId), context);
 
             response.setBody(String.format("{ \"%s\": \"%s\"}", PROPERTY_MESSAGE_ID, messageId));
             response.setStatusCode(HttpStatus.SC_ACCEPTED);
+            Logger.logDebug(String.format("returning response: %s", response), context);
         }
         catch (IllegalArgumentException iae)
         {

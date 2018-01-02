@@ -65,6 +65,7 @@ Resources:
         Variables:
           TOPIC_ARN: !Ref TriggerAlertTopic
           VALID_USER_ID: !Ref ValidUserId
+          LOG_LEVEL: DEBUG
       Events:
         Trigger:
           Type: Api
