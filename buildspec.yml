@@ -1,0 +1,20 @@
+version: 0.2
+
+phases:
+  install:
+    commands:
+      - echo Nothing to do in the install phase...
+  pre_build:
+    commands:
+      - echo Nothing to do in the pre_build phase...
+  build:
+    commands:
+      - echo Build started on `date`
+      - mvn clean package
+      - aws cloudformation package --template-file cloud-formation-template.yaml --s3-bucket $DEPLOYMENT_BUCKET --output-template-file cloud-formation-deploy.yaml
+  post_build:
+    commands:
+      - echo Build completed on `date`
+artifacts:
+  files:
+    - cloud-formation-deploy.yaml

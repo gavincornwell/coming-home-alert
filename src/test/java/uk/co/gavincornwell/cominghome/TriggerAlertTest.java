@@ -23,48 +23,6 @@ public class TriggerAlertTest
     }
     
     @Test
-    public void testValidPhoneNumber() throws Exception
-    {
-        // test valid phone number does not throw an exception
-        alert.validatePhoneNumber("+441234567890");
-    }
-    
-    @Test
-    public void testValidPhoneNumberLong() throws Exception
-    {
-        // test valid phone number does not throw an exception
-        alert.validatePhoneNumber("+441234567890123");
-    }
-    
-    @Test(expected=IllegalArgumentException.class)
-    public void testInvalidPhoneNumberStart() throws Exception
-    {
-        // test phone number that doesn't start with +
-        alert.validatePhoneNumber("01234567890");
-    }
-    
-    @Test(expected=IllegalArgumentException.class)
-    public void testInvalidPhoneNumberWithLetters() throws Exception
-    {
-        // test phone number that contains letters
-        alert.validatePhoneNumber("+1234abcdef");
-    }
-    
-    @Test(expected=IllegalArgumentException.class)
-    public void testInvalidPhoneNumberShort() throws Exception
-    {
-        // test phone number that is too short
-        alert.validatePhoneNumber("+1234");
-    }
-    
-    @Test(expected=IllegalArgumentException.class)
-    public void testInvalidPhoneNumberSpaces() throws Exception
-    {
-        // test phone number that is too short
-        alert.validatePhoneNumber("+1234 567890");
-    }
-    
-    @Test
     public void testExtractMessage() throws Exception
     {
         // test message is extracted successfully

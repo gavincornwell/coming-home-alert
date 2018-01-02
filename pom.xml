@@ -94,4 +94,17 @@
       </plugins>
    </build>
 
+   <repositories>
+      <repository>
+         <id>alfresco-public</id>
+         <url>https://artifacts.alfresco.com/nexus/content/groups/public</url>
+         <releases>
+            <enabled>true</enabled>
+         </releases>
+         <snapshots>
+            <enabled>false</enabled>
+         </snapshots>
+      </repository>
+   </repositories>
+
 </project>
