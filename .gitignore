@@ -22,3 +22,6 @@
 
 # AWS
 cloud-formation-deploy.yaml
+
+# Postman
+report.*

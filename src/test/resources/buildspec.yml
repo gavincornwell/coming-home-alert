@@ -10,13 +10,12 @@ phases:
   build:
     commands:
       - echo Build started on `date`
-      - newman -v
-      - set
       - cd src/test/resources
-      - newman run --global-var userId=abc-123 --global-var baseUrl=https://coming-home-staging.gavincornwell.co.uk --global-var stageName=PipelineStaging postman-collection.json
+      - newman run --global-var userId=$VALID_USER_ID --global-var baseUrl=$BASE_URL --global-var stageName=$STAGE_NAME --reporters html,json --reporter-html-export report.html --reporter-json-export report.json postman-collection.json
   post_build:
     commands:
       - echo Build completed on `date`
-# artifacts:
-#   files:
-#     - report.html
+artifacts:
+  files:
+    - report.html
+    - report.json
