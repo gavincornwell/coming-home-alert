@@ -1,0 +1,24 @@
+version: 0.2
+
+phases:
+  install:
+    commands:
+      - npm install --global newman@3.8.3
+  # pre_build:
+  #   commands:
+  #     - echo Nothing to do in the pre_build phase...
+  build:
+    commands:
+      - echo Build started on `date`
+      - echo Dumping environment variables...
+      - set
+      - cd src/test/resources
+      - newman run --global-var userId=$USER_ID --global-var baseUrl=$BASE_URL --global-var stageName=$STAGE_NAME postman-collection.json
+      # --reporters html,json --reporter-html-export report.html --reporter-json-export report.json
+  post_build:
+    commands:
+      - echo Build completed on `date`
+# artifacts:
+#   files:
+#     - report.html
+#     - report.json

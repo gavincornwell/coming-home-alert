@@ -10,7 +10,7 @@
    <properties>
       <aws.sdk.version>1.11.228</aws.sdk.version>
       <aws.lambda.core.version>1.1.0</aws.lambda.core.version>
-      <alfresco.lambda.utils.version>1.1</alfresco.lambda.utils.version>
+      <alfresco.lambda.utils.version>1.2</alfresco.lambda.utils.version>
    </properties>
 
    <dependencyManagement>
