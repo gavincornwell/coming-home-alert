@@ -12,9 +12,9 @@ phases:
       - echo Build started on `date`
       - echo BASE_URL=$BASE_URL
       - echo STAGE_NAME=$STAGE_NAME
-      - echo VALID_USER_ID=$VALID_USER_ID
+      - echo USER_ID=$USER_ID
       - cd src/test/resources
-      - newman run --global-var userId=$VALID_USER_ID --global-var baseUrl=$BASE_URL --global-var stageName=$STAGE_NAME postman-collection.json
+      - newman run --global-var userId=abc-123 --global-var baseUrl=$BASE_URL --global-var stageName=$STAGE_NAME postman-collection.json
       # --reporters html,json --reporter-html-export report.html --reporter-json-export report.json
   post_build:
     commands:
