@@ -87,7 +87,7 @@ public class TriggerAlert implements RequestHandler<LambdaProxyRequest, LambdaPr
             }
 
             // send the message to the topic
-            String messageId = sendMessage(topicArn, message);
+            String messageId = sendMessage(topicArn, message, context);
             Logger.logInfo(String.format("Message with id '%s' sent", messageId), context);
 
             response.setBody(String.format("{ \"%s\": \"%s\"}", PROPERTY_MESSAGE_ID, messageId));
@@ -149,12 +149,18 @@ public class TriggerAlert implements RequestHandler<LambdaProxyRequest, LambdaPr
      * @return The ID of the SMS sent
      * @throws Exception if the sending of the SMS fails
      */
-    protected String sendMessage(String topicArn, String message) throws Exception
+    protected String sendMessage(String topicArn, String message, Context context) throws Exception
     {
+        Logger.logDebug("In sendMessage", context);
+        
         AmazonSNS snsClient = AmazonSNSClientBuilder.defaultClient();
+        Logger.logDebug("Created SNS client", context);
         
         // send the SMS message
+        Logger.logDebug("Sending message...", context);
         PublishResult result = snsClient.publish(topicArn, message);
+        
+        Logger.logDebug("Message sent, getting message ID...", context);
         
         // return the generated message ID
         return result.getMessageId();
